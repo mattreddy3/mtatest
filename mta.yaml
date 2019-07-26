@@ -1,0 +1,40 @@
+ID: mtatest
+_schema-version: '2.1'
+version: 0.0.1
+
+modules:
+ - name: ui
+   type: html5
+   path: ui
+   parameters:
+      disk-quota: 256M
+      memory: 256M
+   build-parameters:
+      builder: grunt
+   requires:
+    - name: uaa_mtatest
+    - name: dest_mtatest
+
+
+ - name: backend
+   type: nodejs
+   path: backend
+   provides:
+    - name: backend_api
+      properties:
+         url: ${default-url}
+
+resources:
+ - name: uaa_mtatest
+   parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+   type: org.cloudfoundry.managed-service
+
+ - name: dest_mtatest
+   parameters:
+      service-plan: lite
+      service: destination
+   type: org.cloudfoundry.managed-service
+
