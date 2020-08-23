@@ -1,40 +1,84 @@
+## Generated mta.yaml based on template version 0.3.0
+## appName = mtatest
+## language=nodejs; multiTenant=false
+## approuter=
+_schema-version: "3.1"
 ID: mtatest
-_schema-version: '2.1'
-version: 0.0.1
+version: 1.0.0
+description: "A test MTA"
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install --production
+        - npx -p @sap/cds-dk cds build --production
 
 modules:
- - name: ui
-   type: html5
-   path: ui
-   parameters:
-      disk-quota: 256M
-      memory: 256M
-   build-parameters:
-      builder: grunt
-   requires:
-    - name: uaa_mtatest
-    - name: dest_mtatest
+  # --------------------- SERVER MODULE ------------------------
+  - name: mtatest-srv
+    # ------------------------------------------------------------
+    type: nodejs
+    path: gen/srv
+    build-parameters:
+      ignore:
+        - node_modules/
+    requires:
+      # Resources extracted from CAP configuration
+      - name: mtatest-db
+      - name: mtatest-xsuaa
+      - name: mtatest-dest
+      - name: mtatest-conn
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
 
-
- - name: backend
-   type: nodejs
-   path: backend
-   provides:
-    - name: backend_api
-      properties:
-         url: ${default-url}
+  # -------------------- SIDECAR MODULE ------------------------
+  # - name: mtatest-db-deployer
+  #   # ------------------------------------------------------------
+  #   type: hdb
+  #   path: gen/db
+  #   parameters:
+  #     buildpack: nodejs_buildpack
+  #   requires:
+  #     # 'hana' and 'xsuaa' resources extracted from CAP configuration
+  #     - name: mtatest-db
+  #     - name: mtatest-xsuaa
 
 resources:
- - name: uaa_mtatest
-   parameters:
-      path: ./xs-security.json
-      service-plan: application
-      service: xsuaa
-   type: org.cloudfoundry.managed-service
-
- - name: dest_mtatest
-   parameters:
+  # services extracted from CAP configuration
+  # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
+  # ------------------------------------------------------------
+  - name: mtatest-db
+    # ------------------------------------------------------------
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana # or 'hanatrial' on trial landscapes
+      service-plan: hdi-shared
+    properties:
+      hdi-container-name: ${service-name}
+  - name: mtatest-dest
+    parameters:
       service-plan: lite
       service: destination
-   type: org.cloudfoundry.managed-service
+    type: org.cloudfoundry.managed-service
+  - name: mtatest-conn
+    parameters:
+      service-plan: lite
+      service: connectivity
+    type: org.cloudfoundry.managed-service
 
+  # ------------------------------------------------------------
+  - name: mtatest-xsuaa
+    # ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: mtatest-${space} #  name + space dependency
+        tenant-mode: dedicated

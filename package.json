@@ -1,0 +1,53 @@
+{
+  "name": "mtatest",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/audit-logging": "^3.1.1",
+    "@sap/cds": "^4.1.7",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.4.42",
+    "@sap/hana-client": "^2.5.105",
+    "@sap/hdi-deploy": "^3.11.4",
+    "@sap/instance-manager": "^2",
+    "@sap/xsenv": "^3.0.0",
+    "@sap/xssec": "^3.0.9",
+    "express": "^4.17.1",
+    "lodash": "^4.17.20",
+    "passport": "^0.4.1",
+    "sap-cf-axios": "^0.2.19",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "sqlite3": "^4"
+  },
+  "scripts": {
+    "start": "npx cds run"
+  },
+  "cds": {
+    "hana": {
+      "deploy-format": "hdbtable"
+    },
+    "requires": {
+      "db": {
+        "kind": "hana",
+        "model": [
+          "db",
+          "srv"
+        ]
+      },
+      "xsuaa": {
+        "kind": "xsuaa",
+        "credentials": {}
+      },
+      "connectivity": {
+        "kind": "connectivity"
+      },
+      "destination": {
+        "kind": "destination"
+      }
+    }
+  }
+}

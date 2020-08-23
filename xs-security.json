@@ -1,20 +1,232 @@
 {
-  "xsappname": "mtatest",
-  "tenant-mode": "dedicated",
-  "description": "Security profile of called application",
-  "scopes": [
-    {
-      "name": "uaa.user",
-      "description": "UAA"
+    "xsappname": "mta-plantmaint",
+    "tenant-mode": "dedicated",
+    "description": "Security profile of called application",
+    "scopes": [{
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_CREATE",
+            "description": "Create a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_UPDATE",
+            "description": "Update a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_SUBMIT",
+            "description": "Submit a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_REOPEN",
+            "description": "Reopen a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_DELETE",
+            "description": "Delete a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_CANCEL",
+            "description": "Cancel a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_COMPLETE",
+            "description": "Complete a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_CONVERT",
+            "description": "Convert a Notification"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OTHERS",
+            "description": "View Notifications Created by Other Users"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OWN",
+            "description": "View My Notifications"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_NOTIF_PROCESS_OTHERS",
+            "description": "Make any Changes to Notificaitons created by Other Users"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_CREATE",
+            "description": "Create a Work Order"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_UPDATE",
+            "description": "Update a Work Order"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_SUBMIT",
+            "description": "Submit a Work Order"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_RELEASE",
+            "description": "Release a Work Order"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_DELETE",
+            "description": "Delete a Work Order"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_POST_MOVE",
+            "description": "Post Goods Movement"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_POST_CONF",
+            "description": "Post Confirmation"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OTHERS",
+            "description": "View Work Orders Created or Assigned to Others"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OWN",
+            "description": "View My Work Orders"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_WORDER_PROCESS_OTHERS",
+            "description": "Make any changes to a Work Order created by Other Users"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_SYNCH",
+            "description": "Run Synch Functions Manually"
+        },
+        {
+            "name": "$XSAPPNAME.REDFIG_W_USER_MANAGE",
+            "description": "Manage User Information/Roles (to the extent we make this available on the app)"
+        },
+        {
+            "name": "uaa.user",
+            "description": "UAA"
+        }
+    ],
+    "attributes": [{
+        "name": "Country",
+        "description": "Country",
+        "valueType": "string"
+    }],
+    "role-templates": [{
+            "name": "REDFIG_W_NOTIF_SIMPLE",
+            "description": "Simple Notificaiton Management, can create notifications and modify their own Notifications",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CREATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_UPDATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_NOTIF_SUBMIT"
+            ]
+        },
+        {
+            "name": "REDFIG_W_NOTIF_FULL",
+            "description": "Full Notification Management",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CREATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_UPDATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_SUBMIT",
+                "$XSAPPNAME.REDFIG_W_NOTIF_REOPEN",
+                "$XSAPPNAME.REDFIG_W_NOTIF_DELETE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CANCEL",
+                "$XSAPPNAME.REDFIG_W_NOTIF_COMPLETE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OTHERS",
+                "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_NOTIF_PROCESS_OTHERS"
+            ]
+        },
+        {
+            "name": "REDFIG_W_NOTIF_CONVERT",
+            "description": "Convert Notification to Work Order",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CONVERT"
+            ]
+        },
+        {
+            "name": "REDFIG_W_WORDER_SIMPLE",
+            "description": "Can Create Work Order, and update/post/confirm against their own work orders",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_WORDER_CREATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_WORDER_UPDATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_SUBMIT",
+                "$XSAPPNAME.REDFIG_W_WORDER_RELEASE",
+                "$XSAPPNAME.REDFIG_W_WORDER_DELETE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_MOVE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_CONF"
+            ]
+        },
+        {
+            "name": "REDFIG_W_WORDER_FULL",
+            "description": "Full Work Order Management",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_WORDER_CREATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_UPDATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_SUBMIT",
+                "$XSAPPNAME.REDFIG_W_WORDER_RELEASE",
+                "$XSAPPNAME.REDFIG_W_WORDER_DELETE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_MOVE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_CONF",
+                "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OTHERS",
+                "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_WORDER_PROCESS_OTHERS"
+            ]
+        },
+        {
+            "name": "REDFIG_W_PMADMIN",
+            "description": "Run All Admin Functions for PM",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_WORDER_CREATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_UPDATE",
+                "$XSAPPNAME.REDFIG_W_WORDER_SUBMIT",
+                "$XSAPPNAME.REDFIG_W_WORDER_RELEASE",
+                "$XSAPPNAME.REDFIG_W_WORDER_DELETE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_MOVE",
+                "$XSAPPNAME.REDFIG_W_WORDER_POST_CONF",
+                "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OTHERS",
+                "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_WORDER_PROCESS_OTHERS",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CREATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_UPDATE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_SUBMIT",
+                "$XSAPPNAME.REDFIG_W_NOTIF_REOPEN",
+                "$XSAPPNAME.REDFIG_W_NOTIF_DELETE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CANCEL",
+                "$XSAPPNAME.REDFIG_W_NOTIF_COMPLETE",
+                "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OTHERS",
+                "$XSAPPNAME.REDFIG_W_NOTIF_VIEW_OWN",
+                "$XSAPPNAME.REDFIG_W_NOTIF_CONVERT",
+                "$XSAPPNAME.REDFIG_W_NOTIF_PROCESS_OTHERS"
+            ]
+        },
+        {
+            "name": "REDFIG_W_IT",
+            "description": "IT Admin for Redfig Werks (run/monitor synch jobs, manage users)",
+            "scope-references": [
+                "uaa.user",
+                "$XSAPPNAME.REDFIG_W_SYNCH",
+                "$XSAPPNAME.REDFIG_W_USER_MANAGE"
+            ]
+        },
+        {
+            "name": "Token_Exchange",
+            "description": "UAA",
+            "scope-references": [
+                "uaa.user",
+                "xs_authorization.read"
+            ]
+        }
+    ],
+    "oauth2-configuration": {
+        "token-validity": 900,
+        "refresh-token-validity": 1800,
+        "autoapprove": "true",
+        "grant-types": [
+            "refresh_token",
+            "urn:ietf:params:oauth:grant-type:saml2-bearer",
+            "password",
+            "authorization_code"
+        ]
     }
-  ],
-  "role-templates": [
-    {
-      "name": "Token_Exchange",
-      "description": "UAA",
-      "scope-references": [
-        "uaa.user"
-      ]
-    }
-  ]
 }
