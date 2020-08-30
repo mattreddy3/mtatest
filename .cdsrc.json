@@ -7,7 +7,8 @@
                     "password": "1234",
                     "ID": "matt@redfigllc.com",
                     "roles": [
-                        "$XSAPPNAME.REDFIG_W_WORDER_VIEW_OWN"
+                        "REDFIG_W_WORDER_VIEW_OWN",
+                        "REDFIG_W_SYNCH"
                     ]
                 }
             }

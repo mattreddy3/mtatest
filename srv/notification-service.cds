@@ -3,10 +3,11 @@ using {
     sap.common
 } from '../db/schema';
 
-@path     : '/notification'
-@impl     : './impl/notification-service'
-@requires : 'authenticated-user'
+@path : '/notification'
+@impl : './impl/notification-service'
+// @requires : 'authenticated-user'
 service NotificationService { // segw project
+    // entity NotificationReport() as projection on my.NotificationHeader
     entity Notifications         as projection on my.NotificationHeader { // segw entity
         * , equipment.ERPID as EquipmentID, equipment.EquipmentDesc as EquipmentDesc, functionalLocation.FunctionalLocationID as FunctionalLocationID, functionalLocation.FunctionalLocationDesc as FunctionalLocationDesc, notificationType.NotificationTypeID as NotificationTypeID, notificationType.NotificationTypeDesc as NotificationTypeDesc, workCenter.WorkCenterID as WorkCenterID, workCenter.WorkCenterDesc as WorkCenterDesc, priorityCode.PriorityCodeID as PriorityCodeID, priorityCode.PriorityDesc as PriorityDesc, createdUserInfo.DisplayName as CreatedByName, modifiedUserInfo.DisplayName as ModifiedByName
     } actions {

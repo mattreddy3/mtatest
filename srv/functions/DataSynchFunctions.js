@@ -174,6 +174,8 @@ const bootstrapDBServices = async (req) => {
 	req.tenantID = await getTenantID()
 
 	//	Main Service = DataSynch
+	req.synch.db = await cds.connect.to("db")
+	// console.log(req.synch.db)
 	req.synch.srv = await cds.connect.to(mainService)
 	req.synch.srvTx = req.synch.srv.transaction(req)
 
@@ -227,9 +229,13 @@ const stopJob = async (req, result) => {
 //	AGGREGATE LOG
 const aggregateLog = async (req, objTypeID, ignoreSchedule, objID) => {
 	//	This function looks at the Synch Schedule and 
+	try {
 
-	//	Check Object Types that should be processed and add them to the log with status P
-	await addPendingEntriesToLog(req, objTypeID, ignoreSchedule, objID)
+		//	Check Object Types that should be processed and add them to the log with status P
+		await addPendingEntriesToLog(req, objTypeID, ignoreSchedule, objID)
+	} catch (e) {
+		console.log(JSON.stringify(e))
+	}
 
 	//	Add entries that need to be reprocessed because of error
 	await addErrorEntriesToLog(req, objTypeID)
@@ -263,11 +269,17 @@ const addPendingEntriesToLog = async (req, objTypeID, ignoreSchedule, objectID) 
 			return synch.ID === objTypeID
 		})
 		if (found) {
-			addToLog(req, objTypeID, objectID)
+			await addToLog(req, objTypeID, objectID)
 		}
 	} else if (ignoreSchedule) {
 		//	IF we are ignoring the schedule, all all synch objects to log
-		await Promise.all(synchObjects.map((obj) => addToLog(req, obj.ID, objectID)))
+		try {
+
+			// await Promise.all(synchObjects.map((obj) => addToLog(req, obj.ID, objectID)))
+			await addToLog(req, synchObjects, objectID)
+		} catch (e) {
+			console.log(JSON.stringify(e))
+		}
 	} else {
 		// Otherwise, check the Synch Schedule before adding the object to the log
 		await Promise.all(synchObjects.filter((obj) => {
@@ -397,15 +409,24 @@ const addToLog = async (req, objTypeID, objectID) => {
 	const {
 		DataSynchLog
 	} = req.synch.srv.entities
-
-	//const insertResults = await req.synch.srvTx.run( INSERT.into(DataSynchLog)		//TODO - Figure out why this causes a Error: No handler registered for CREATE redfig.plantmaint.DataSynchLog
-	const insertResults = await req.synch.dbTx.run(INSERT.into(DataSynchLog)
-		.entries({
+	// const {
+	// 	DataSynchLog
+	// } = req.synch.db.entities
+	const entryArray = Array.isArray(objTypeID) ?
+		objTypeID.map(obj => ({
+			objectType_ID: obj.ID,
+			tenantID: req.tenantID,
+			ObjectID: objectID,
+			SynchStatus: "P"
+		})) : [{
 			objectType_ID: objTypeID,
 			tenantID: req.tenantID,
 			ObjectID: objectID,
 			SynchStatus: "P"
-		}))
+		}];
+	//const insertResults = await req.synch.srvTx.run( INSERT.into(DataSynchLog)		//TODO - Figure out why this causes a Error: No handler registered for CREATE redfig.plantmaint.DataSynchLog
+	const insertResults = await req.synch.dbTx.run(INSERT.into(DataSynchLog)
+		.entries(entryArray))
 	// return insertResults[0]
 	return insertResults
 }

@@ -5,7 +5,7 @@ using {
 
 @path     : '/datasynch'
 @impl     : './impl/synch-service'
-@requires : 'authenticated-user'
+@requires : 'REDFIG_W_SYNCH'
 service SynchService {
     // need a lot of actions here for various sync procedures
 

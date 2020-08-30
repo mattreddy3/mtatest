@@ -36,7 +36,37 @@ module.exports = cds.service.impl(srv => {
 	// srv.before(	["READ","CREATE", "UPDATE", "process"], "Notifications", bootstrapReq)
 	srv.before("READ", "ObjActions", bootstrapReq)
 	srv.before("READ", bootstrapReq)
-	srv.on("READ", "Notifications", readData) // Replaces standard Handler for GET
+	srv.on("READ", "Notifications", req => {
+		req.error({
+			code: "N-121",
+			message: 'Some Custom Error Message',
+			target: "NotificationTypeID"
+		})
+		req.error({
+			code: "N-121",
+			message: "Another",
+			target: "RequiredEndDate"
+		})
+		req.error({
+			code: 409,
+			message: "Header",
+			target: "ID"
+		})
+		if (req.errors) {
+			const header = req.errors.pop()
+			// return req.reject(Object.assign(header, {
+			// 	details: req.errors
+			// }))
+			throw Object.assign(header, {
+				details: req.errors
+			})
+		}
+	})
+	srv.on("READ", "Notifications", (req, next) => {
+		console.log("hit another")
+		return next()
+	})
+	// srv.on("READ", "Notifications", readData) // Replaces standard Handler for GET
 	srv.on("READ", "ObjActions", readActions) // Actions must be filled manually
 
 	srv.on(["CREATE", "UPDATE", "process"], "Notifications", preProcess) // Validate Inputs, get current DB state

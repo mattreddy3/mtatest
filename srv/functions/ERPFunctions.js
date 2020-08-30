@@ -249,7 +249,6 @@ const getData = async (sEndpoint, clauses) => {
 		handleERPError(e)
 	}
 }
-
 //	HANDLE ERP ERROR
 const handleERPError = (e) => {
 

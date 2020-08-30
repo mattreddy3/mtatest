@@ -25,6 +25,9 @@ modules:
     build-parameters:
       ignore:
         - node_modules/
+    parameters:
+      memory: 612M
+      disk-quota: 612M
     requires:
       # Resources extracted from CAP configuration
       - name: mtatest-db
@@ -34,7 +37,8 @@ modules:
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
         properties:
-          srv-url: ${default-url}
+          srv-url: "${default-url}"
+          url: "${default-url}"
 
   # -------------------- SIDECAR MODULE ------------------------
   # - name: mtatest-db-deployer
@@ -59,7 +63,7 @@ resources:
       service: hana # or 'hanatrial' on trial landscapes
       service-plan: hdi-shared
     properties:
-      hdi-container-name: ${service-name}
+      hdi-container-name: "${service-name}"
   - name: mtatest-dest
     parameters:
       service-plan: lite
@@ -80,5 +84,5 @@ resources:
       service-plan: application
       path: ./xs-security.json
       config:
-        xsappname: mtatest-${space} #  name + space dependency
+        xsappname: "mtatest-${space}" #  name + space dependency
         tenant-mode: dedicated

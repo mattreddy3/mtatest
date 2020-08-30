@@ -5,6 +5,7 @@ using {
 
 @path     : '/lookups'
 @requires : 'authenticated-user'
+@impl     : './impl/masterdata-service'
 service MasterDataService { // segw project
     //	Master Data
     @readonly
