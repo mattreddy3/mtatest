@@ -15,7 +15,7 @@
     "@sap/xsenv": "^3.0.0",
     "@sap/xssec": "^3.0.9",
     "express": "^4.17.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "passport": "^0.4.1",
     "sap-cf-axios": "^0.2.19",
     "xml2js": "^0.4.23"
